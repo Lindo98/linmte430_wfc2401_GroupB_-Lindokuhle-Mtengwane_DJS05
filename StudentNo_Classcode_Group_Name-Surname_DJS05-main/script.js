@@ -4,6 +4,8 @@ const subtractButton = document.getElementById("subtract");
 const resetButton = document.getElementById("reset");
 
 let currentState = initialState;
+
+const subscribers = [];
 /**
  * Reduces the state based on the given action.
  *
@@ -33,6 +35,15 @@ const render = () => {
 const dispatch = (action) => {
   currentState = reducer(currentState, action);
   render();
+  notifySubscribers();
+};
+
+const notifySubscribers = () => {
+  subscribers.forEach((subscriber) => subscriber());
+};
+
+const subscribe = (callback) => {
+  subscribers.push(callback);
 };
 
 addButton.addEventListener("click", () => dispatch({ type: "ADD" }));
@@ -40,3 +51,7 @@ subtractButton.addEventListener("click", () => dispatch({ type: "SUBTRACT" }));
 resetButton.addEventListener("click", () => dispatch({ type: "RESET" }));
 
 render();
+
+subscribe(() => {
+  console.log("New state: ", currentState);
+});
