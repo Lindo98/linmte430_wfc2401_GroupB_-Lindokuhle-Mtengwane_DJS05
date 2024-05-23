@@ -3,6 +3,7 @@ const addButton = document.getElementById("add");
 const subtractButton = document.getElementById("subtract");
 const resetButton = document.getElementById("reset");
 
+let currentState = initialState;
 /**
  * Reduces the state based on the given action.
  *
@@ -24,3 +25,18 @@ const reducer = (state = initialState, action) => {
       return state;
   }
 };
+
+const render = () => {
+  document.getElementById("count-el").innerText = currentState.count;
+};
+
+const dispatch = (action) => {
+  currentState = reducer(currentState, action);
+  render();
+};
+
+addButton.addEventListener("click", () => dispatch({ type: "ADD" }));
+subtractButton.addEventListener("click", () => dispatch({ type: "SUBTRACT" }));
+resetButton.addEventListener("click", () => dispatch({ type: "RESET" }));
+
+render();
